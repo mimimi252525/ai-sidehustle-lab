@@ -5,7 +5,7 @@ import ToolCard from '../components/ToolCard.astro';
 import GuideCard from '../components/GuideCard.astro';
 import hero from '../assets/hero.png';
 import tools from '../data/tools.json';
-import guides from '../data/guides.json';
+import { publishedGuides as guides } from '../data/published-guides';
 const categories = [
   { href: '/tools/', name: 'AIツールを探す', summary: '用途や条件でツールを比較', symbol: '⌕', theme: 'lavender' },
   { href: '/guides/', name: '副業ガイドを読む', summary: '始め方から実践のコツまで', symbol: '▤', theme: 'pink' },

@@ -1,0 +1,194 @@
+[
+  {
+    "id": "first-portfolio",
+    "topic": "AI副業向けポートフォリオの作り方",
+    "category": "作品づくり",
+    "audience": "実績がなく、作品見本の作り方を知りたい人",
+    "intent": "公開できる見本をひとつ作る手順を知りたい",
+    "keyword": "AI副業 ポートフォリオ 作り方",
+    "priority": 12,
+    "status": "pending",
+    "disclosure": "不要",
+    "outline": [
+      "見本のテーマと依頼条件を決める",
+      "制作過程と自分の工夫を記録する",
+      "見本として表示する前に確認する"
+    ]
+  },
+  {
+    "id": "brief-for-ai-project",
+    "topic": "AIを使う仕事のヒアリング項目",
+    "category": "受注準備",
+    "audience": "初めて制作の相談を受ける人",
+    "intent": "制作前に依頼者へ聞く質問をそろえたい",
+    "keyword": "AI副業 ヒアリング 項目",
+    "priority": 11,
+    "status": "pending",
+    "disclosure": "不要",
+    "outline": [
+      "依頼の目的と成果物を聞く",
+      "AI利用とデータの扱いを確認する",
+      "納期と修正範囲を合意する"
+    ]
+  },
+  {
+    "id": "redact-inputs",
+    "topic": "AIに入力する前の個人情報チェック",
+    "category": "安全な利用",
+    "audience": "仕事の文章をAIで整理したい初心者",
+    "intent": "何を伏せ、どう置き換えるかを知りたい",
+    "keyword": "生成AI 入力 個人情報 チェック",
+    "priority": 10,
+    "status": "pending",
+    "disclosure": "不要",
+    "outline": [
+      "入力する必要のある情報を絞る",
+      "架空の例で伏せ字と置き換えを試す",
+      "提供元のデータ取り扱いを確認する"
+    ]
+  },
+  {
+    "id": "social-post-review",
+    "topic": "AIで作ったSNS投稿の公開前チェック",
+    "category": "文章・SNS",
+    "audience": "SNS投稿の案をAIで作り始めた人",
+    "intent": "誤りや不自然な表現を投稿前に見つけたい",
+    "keyword": "AI SNS 投稿 公開前 チェック",
+    "priority": 9,
+    "status": "pending",
+    "disclosure": "不要",
+    "outline": [
+      "投稿の目的と読者を確認する",
+      "固有名詞・数字・リンクを確かめる",
+      "媒体に合わせて言葉と長さを整える"
+    ]
+  },
+  {
+    "id": "image-asset-record",
+    "topic": "AI画像の制作記録を残す方法",
+    "category": "画像・デザイン",
+    "audience": "AI画像を仕事の素材に使いたい人",
+    "intent": "画像の出所と用途を引き継げる形で記録したい",
+    "keyword": "AI画像 制作記録 管理",
+    "priority": 8,
+    "status": "pending",
+    "disclosure": "要確認",
+    "outline": [
+      "使用ツールとモデルを記録する",
+      "素材とライセンスの参照先を控える",
+      "加工内容と利用先を追記する"
+    ]
+  },
+  {
+    "id": "product-description-inputs",
+    "topic": "商品説明を作る前に集める情報",
+    "category": "文章・SNS",
+    "audience": "小規模なネットショップの商品説明を整えたい人",
+    "intent": "AIに渡せる仕様や用途の整理方法を知りたい",
+    "keyword": "AI 商品説明 商品情報 整理",
+    "priority": 7,
+    "status": "pending",
+    "disclosure": "要確認",
+    "outline": [
+      "商品仕様を事実として整理する",
+      "利用シーンと想定読者を書く",
+      "未確認の仕様と誇張表現を点検する"
+    ]
+  },
+  {
+    "id": "estimate-work-hours",
+    "topic": "AIを使う制作の作業時間を見積もる方法",
+    "category": "受注準備",
+    "audience": "初案件の工数が読めず困っている人",
+    "intent": "下書きから納品までの工程を見積もりたい",
+    "keyword": "AI副業 作業時間 見積もり",
+    "priority": 6,
+    "status": "pending",
+    "disclosure": "不要",
+    "outline": [
+      "工程を分けて一度計測する",
+      "検証と修正の時間を見込む",
+      "実測と見積もりの差を次回に生かす"
+    ]
+  },
+  {
+    "id": "compare-prompt-versions",
+    "topic": "プロンプトの改善結果を比べる方法",
+    "category": "プロンプト",
+    "audience": "指示の書き換えで何が変わったか調べたい人",
+    "intent": "条件をそろえた比較表を作りたい",
+    "keyword": "プロンプト 改善 比較 方法",
+    "priority": 5,
+    "status": "pending",
+    "disclosure": "不要",
+    "outline": [
+      "評価項目と入力条件を決める",
+      "指示を一箇所ずつ変えて試す",
+      "差分と採用理由を記録する"
+    ]
+  },
+  {
+    "id": "source-check-for-ai-text",
+    "topic": "AIの文章に出てくる出典の確認方法",
+    "category": "安全な利用",
+    "audience": "引用やリンクを含むAI下書きを受け取った人",
+    "intent": "原典で主張と引用を照合する手順を知りたい",
+    "keyword": "生成AI 出典 確認 方法",
+    "priority": 4,
+    "status": "pending",
+    "disclosure": "不要",
+    "outline": [
+      "確認する主張と引用を洗い出す",
+      "一次情報で該当箇所を探す",
+      "裏付けの弱い記述を修正する"
+    ]
+  },
+  {
+    "id": "deliverable-handoff",
+    "topic": "AIを使った制作物の納品メモの作り方",
+    "category": "受注準備",
+    "audience": "納品時に何を伝えるべきか迷う人",
+    "intent": "ファイルと利用上の注意を整理して渡したい",
+    "keyword": "AI制作物 納品 メモ",
+    "priority": 3,
+    "status": "pending",
+    "disclosure": "要確認",
+    "outline": [
+      "納品ファイルと形式を一覧にする",
+      "合意した範囲でAI利用を説明する",
+      "再編集や素材の利用条件を確認する"
+    ]
+  },
+  {
+    "id": "ai-assisted-alt-text",
+    "topic": "AIと一緒に画像の代替テキストを整える方法",
+    "category": "画像・デザイン",
+    "audience": "ブログや商品ページに画像を載せる人",
+    "intent": "画像の目的に合う代替テキストを作りたい",
+    "keyword": "AI 代替テキスト 書き方",
+    "priority": 2,
+    "status": "pending",
+    "disclosure": "不要",
+    "outline": [
+      "ページでの画像の役割を見極める",
+      "文脈を添えて代替テキスト案を作る",
+      "不要な説明や画像にない事実を削る"
+    ]
+  },
+  {
+    "id": "ai-workflow-cost-log",
+    "topic": "AI副業のツール費用を記録する方法",
+    "category": "副業管理",
+    "audience": "サブスクや都度払いを整理したい人",
+    "intent": "継続費用を見直せる記録表を作りたい",
+    "keyword": "AI副業 ツール費用 管理",
+    "priority": 1,
+    "status": "pending",
+    "disclosure": "要確認",
+    "outline": [
+      "契約名・更新日・通貨を控える",
+      "固定費と都度払いを分ける",
+      "公式の請求情報で定期的に見直す"
+    ]
+  }
+]
