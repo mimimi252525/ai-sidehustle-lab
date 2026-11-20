@@ -1,0 +1,48 @@
+---
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import hero from '../assets/hero.png';
+import { information, navigation, siteName } from '../data/site';
+interface Props { title: string; description: string; home?: boolean; }
+const { title, description, home = false } = Astro.props;
+const pageTitle = home ? `${siteName}｜初心者のためのAIツール比較・副業ガイド` : `${title}｜${siteName}`;
+const canonical = Astro.site && new URL(Astro.url.pathname, Astro.site);
+const ogImage = Astro.site && new URL((await getImage({ src: hero, width: 1200, format: 'webp' })).src, Astro.site);
+const active = (href: string) => Astro.url.pathname.startsWith(href);
+---
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    {canonical ? <link rel="canonical" href={canonical} /> : <meta name="robots" content="noindex, nofollow" />}
+    <meta property="og:type" content={Astro.url.pathname.startsWith('/guides/') && Astro.url.pathname !== '/guides/' ? 'article' : 'website'} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="ja_JP" />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {Astro.site && <meta property="og:image:alt" content="ノートパソコンを使うラベンダー色のロボット" />}
+  </head>
+  <body>
+    <a href="#main" class="skip">本文へ移動</a>
+    <header class="header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/" aria-current={home ? 'page' : undefined}><span aria-hidden="true">✦</span>{siteName}</a>
+        <nav aria-label="メイン">
+          {navigation.map(({ href, label }, index) => <a class:list={[{ 'nav-cta': index === 2 }]} href={href} aria-current={active(href) ? (Astro.url.pathname === href ? 'page' : 'location') : undefined}>{label}</a>)}
+        </nav>
+      </div>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer class="footer">
+      <div class="wrap footer-inner">
+        <div><a class="brand" href="/"><span aria-hidden="true">✦</span>{siteName}</a><p>初心者のためのAIツール比較・副業ガイド</p></div>
+        <nav aria-label="サイト情報">{Object.entries(information).map(([id, entry]) => <a href={`/${id}/`}>{entry.title}</a>)}</nav>
+      </div>
+    </footer>
+  </body>
+</html>

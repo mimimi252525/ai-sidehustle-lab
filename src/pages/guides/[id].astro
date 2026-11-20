@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import guides from '../../data/guides.json';
+export function getStaticPaths() {
+  return guides.map(guide => ({ params: { id: guide.id }, props: { guide } }));
+}
+const { guide } = Astro.props;
+---
+<Base title={guide.title} description={guide.description}>
+  <article class="wrap page narrow">
+    <a class="back" href="/guides/">← AI副業ガイド</a>
+    <header class="page-heading"><div class="tags"><span>{guide.category}</span></div><h1>{guide.title}</h1><p>{guide.description}</p><time datetime={guide.updated}>更新日 {guide.updated.replaceAll('-', '.')}</time></header>
+    <div class="card reading">{guide.sections.map(({ heading, body }) => <section><h2>{heading}</h2><p>{body}</p></section>)}</div>
+    <div class="actions"><a class="button secondary" href="/tools/">AIツールを比較する</a><a class="button primary" href="/prompts/">プロンプトを作る</a></div>
+  </article>
+</Base>

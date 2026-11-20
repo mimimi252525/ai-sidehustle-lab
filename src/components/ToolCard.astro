@@ -1,0 +1,13 @@
+---
+import tools from '../data/tools.json';
+interface Props { tool: typeof tools[number]; }
+const { tool } = Astro.props;
+---
+<article class="card tool-card" data-tool data-category={tool.category} data-free={tool.freePlan} data-japanese={tool.japanese} data-commercial={tool.commercial}>
+  <div class="card-top">
+    <span class:list={['icon', tool.theme]} aria-hidden="true">{tool.symbol}</span>
+    <div><h3><a href={`/tools/${tool.id}/`}>{tool.name}</a></h3><div class="muted small">{tool.maker}</div></div>
+  </div>
+  <p>{tool.summary}</p>
+  <div class="tags"><span>{tool.category}</span><span>無料枠 {tool.freePlan}</span></div>
+</article>

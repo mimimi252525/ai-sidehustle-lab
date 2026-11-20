@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import GuideCard from '../../components/GuideCard.astro';
+import guides from '../../data/guides.json';
+---
+<Base title="AI副業ガイド" description="AI副業の始め方、無料AIツールを選ぶ基準、記事作成の手順を初心者向けに解説します。">
+  <div class="wrap page">
+    <div class="page-heading"><h1>AI副業ガイド</h1><p>ツールの選び方から成果物の作り方まで、手順を見ながら実践しましょう。</p></div>
+    <h2 class="sr-only">記事一覧</h2>
+    <div class="grid">{guides.map(guide => <GuideCard guide={guide} />)}</div>
+  </div>
+</Base>

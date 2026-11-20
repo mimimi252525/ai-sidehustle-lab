@@ -1,0 +1,14 @@
+---
+import guides from '../data/guides.json';
+interface Props { guide: typeof guides[number]; }
+const { guide } = Astro.props;
+---
+<article class="card guide-card">
+  <div class:list={['guide-cover', guide.theme]} aria-hidden="true">{guide.symbol}</div>
+  <div class="guide-content">
+    <div class="tags"><span>{guide.category}</span></div>
+    <h3><a href={`/guides/${guide.id}/`}>{guide.title}</a></h3>
+    <p>{guide.description}</p>
+    <time datetime={guide.updated}>更新日 {guide.updated.replaceAll('-', '.')}</time>
+  </div>
+</article>
