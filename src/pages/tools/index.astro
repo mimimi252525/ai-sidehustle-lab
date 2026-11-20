@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+import ToolCard from '../../components/ToolCard.astro';
+import tools from '../../data/tools.json';
+
+const filters = [
+  { name: 'category', label: '用途', options: [...new Set(tools.map(tool => tool.category))] },
+  { name: 'free', label: '無料プラン', options: ['あり', 'なし', '要確認'] },
+  { name: 'japanese', label: '日本語対応', options: ['日本語で入力可', '非対応', '要確認'] },
+  { name: 'commercial', label: '商用利用', options: ['利用可', '条件付き', '利用不可', '要確認'] },
+];
+---
+<Base title="AIツール一覧" description="用途、無料プラン、日本語対応、商用利用条件でAIツールを絞り込み、詳細を比較できます。">
+  <div class="wrap page">
+    <div class="page-heading"><h1>AIツール一覧</h1><p>目的と条件を選んで、自分に合うツールを探しましょう。</p></div>
+    <form id="filters" class="card form-card" hidden>
+      <div class="filter-grid">{filters.map(({ name, label, options }) => <label>{label}<select name={name}><option value="">すべて</option>{options.map(option => <option>{option}</option>)}</select></label>)}</div>
+      <button class="button secondary" type="reset">条件をクリア</button>
+    </form>
+    <noscript><p>絞り込みを使うにはJavaScriptを有効にしてください。</p></noscript>
+    <p class="muted">「要確認」の項目は未検証です。最新の条件は各ツールの公式情報でご確認ください。</p>
+    <h2 class="sr-only">検索結果</h2>
+    <p id="result-count" role="status">{tools.length}件のツール</p>
+    <p id="no-results" class="card empty" hidden>一致するツールがありません。別の条件で探してください。</p>
+    <div class="grid">{tools.map(tool => <ToolCard tool={tool} />)}</div>
+  </div>
+</Base>
+<script>
+  const form = document.querySelector<HTMLFormElement>('#filters')!;
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-tool]')];
+  const count = document.querySelector('#result-count')!;
+  const empty = document.querySelector<HTMLElement>('#no-results')!;
+
+  function filterTools() {
+    const conditions = [...new FormData(form)];
+    let visible = 0;
+    for (const card of cards) {
+      card.hidden = !conditions.every(([key, value]) => !value || card.dataset[key] === value);
+      if (!card.hidden) visible++;
+    }
+    count.textContent = `${visible}件のツール`;
+    empty.hidden = visible !== 0;
+  }
+
+  form.addEventListener('submit', event => event.preventDefault());
+  form.addEventListener('change', filterTools);
+  form.addEventListener('reset', () => window.setTimeout(filterTools, 0));
+  window.addEventListener('pageshow', filterTools);
+  filterTools();
+  form.hidden = false;
+</script>

@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="無料プロンプト生成" description="SNS投稿、画像生成、ブログ記事、商品説明に使うプロンプトをブラウザ内で作成できます。">
+  <div class="wrap page">
+    <div class="page-heading"><h1>無料プロンプト生成</h1><p>用途を選び、テーマを入力すると、AIツールに貼り付けられる指示文ができます。入力内容はブラウザ内で処理します。</p></div>
+    <noscript><p>プロンプト生成にはJavaScriptが必要です。</p></noscript>
+    <div class="prompt-grid" id="prompt-app" hidden>
+      <form id="prompt-form" class="card form-card">
+        <h2>条件を入力</h2>
+        <label>カテゴリ<select name="category"><option value="social">SNS投稿</option><option value="image">画像生成</option><option value="blog">ブログ記事</option><option value="product">商品説明</option></select></label>
+        <label>テーマ（必須）<textarea name="topic" required maxlength="500" rows="3" placeholder="例：週末に作れる簡単な朝ごはん"></textarea></label>
+        <label>対象読者・利用シーン<input name="audience" maxlength="120" placeholder="例：料理を始めたばかりの人" /></label>
+        <label>トーン<select name="tone"><option>親しみやすい</option><option>落ち着いた</option><option>明るく元気</option><option>シンプル</option></select></label>
+        <button class="button primary" type="submit">プロンプトを生成</button>
+      </form>
+      <section class="card form-card">
+        <h2><label for="prompt-output">生成したプロンプト</label></h2>
+        <textarea id="prompt-output" rows="13" readonly placeholder="生成した指示文がここに表示されます。"></textarea>
+        <button id="copy" class="button secondary" type="button" disabled>コピーする</button>
+        <p id="prompt-status" role="status"></p>
+      </section>
+    </div>
+  </div>
+</Base>
+<script>
+  const templates: Record<string, { task: string; format: string }> = {
+    social: { task: 'SNSの投稿文を3案作成してください。', format: '各案は冒頭の一文、本文、行動を促す一文、関連するハッシュタグ3個の順で提示してください。' },
+    image: { task: '画像生成ツール用の指示文を作成してください。', format: '被写体、背景、構図、配色、光の順に具体化し、縦横比と避けたい要素も示してください。' },
+    blog: { task: 'ブログ記事の構成と下書きを作成してください。', format: 'タイトル案、導入、見出し付きの本文、まとめを提示してください。出典の確認が必要な箇所には「要確認」と記してください。' },
+    product: { task: '商品ページに掲載する説明文を作成してください。', format: '見出し、商品の特徴、利用シーン、購入前に確認する点を提示してください。与えられていない仕様や効果は補わず「要確認」と記してください。' },
+  };
+  const app = document.querySelector<HTMLElement>('#prompt-app')!;
+  const form = document.querySelector<HTMLFormElement>('#prompt-form')!;
+  const topic = form.querySelector<HTMLTextAreaElement>('[name="topic"]')!;
+  const output = document.querySelector<HTMLTextAreaElement>('#prompt-output')!;
+  const copy = document.querySelector<HTMLButtonElement>('#copy')!;
+  const status = document.querySelector('#prompt-status')!;
+
+  topic.addEventListener('input', () => topic.setCustomValidity(''));
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const theme = topic.value.trim();
+    if (!theme) {
+      topic.setCustomValidity('テーマを入力してください。');
+      topic.reportValidity();
+      return;
+    }
+    const values = new FormData(form);
+    const template = templates[String(values.get('category'))];
+    if (!template) return;
+    const audience = String(values.get('audience') ?? '').trim();
+    output.value = [
+      template.task, '', `テーマ：${theme}`,
+      ...(audience ? [`対象読者・利用シーン：${audience}`] : []),
+      `トーン：${values.get('tone')}`, '', `出力形式：${template.format}`,
+    ].join('\n');
+    copy.disabled = false;
+    status.textContent = 'プロンプトを生成しました。';
+  });
+
+  copy.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(output.value);
+      status.textContent = 'クリップボードにコピーしました。';
+    } catch {
+      output.focus();
+      output.select();
+      status.textContent = '自動コピーが使えないため、選択した文章をコピーしてください。';
+    }
+  });
+  app.hidden = false;
+</script>

@@ -1,0 +1,41 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import ToolCard from '../components/ToolCard.astro';
+import GuideCard from '../components/GuideCard.astro';
+import hero from '../assets/hero.png';
+import tools from '../data/tools.json';
+import guides from '../data/guides.json';
+const categories = [
+  { href: '/tools/', name: 'AIツールを探す', summary: '用途や条件でツールを比較', symbol: '⌕', theme: 'lavender' },
+  { href: '/guides/', name: '副業ガイドを読む', summary: '始め方から実践のコツまで', symbol: '▤', theme: 'pink' },
+  { href: '/prompts/', name: 'プロンプトを作る', summary: '4種類のテンプレートを無料で', symbol: '✦', theme: 'mint' },
+  { href: '/templates/', name: 'テンプレート販売', summary: '販売ページは準備中', symbol: '▧', theme: 'peach' },
+];
+---
+<Base home title="ホーム" description="無料AIツールを探す初心者へ。用途別の比較、AI副業の始め方、ブラウザで使える無料プロンプト生成機能を提供します。">
+  <div class="wrap">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span aria-hidden="true">✦</span> はじめてのAI活用</p>
+        <h1 id="hero-title">AI副業のはじめ方が<br />見つかる<span>。</span></h1>
+        <p>自分に合うAIツールを探して、小さな実践から始めよう。<br class="desktop" />ツール比較、初心者向けガイド、無料のプロンプト生成。</p>
+        <div class="actions"><a class="button primary" href="/tools/">AIツールを探す <span aria-hidden="true">→</span></a><a class="button secondary" href="/prompts/">無料でプロンプトを作る</a></div>
+      </div>
+      <Image src={hero} alt="" widths={[480, 768, 1056]} sizes="(max-width: 760px) 100vw, 50vw" format="webp" loading="eager" fetchpriority="high" />
+    </section>
+    <section class="section" aria-labelledby="categories-title">
+      <div class="section-heading"><h2 id="categories-title">目的から探す</h2></div>
+      <div class="category-grid">{categories.map(({ href, name, summary, symbol, theme }) => <a class="card category-card" href={href}><span class:list={['icon', theme]} aria-hidden="true">{symbol}</span><strong>{name}</strong><span class="muted small">{summary}</span><span class="category-arrow" aria-hidden="true">→</span></a>)}</div>
+    </section>
+    <section class="section" aria-labelledby="tools-title">
+      <div class="section-heading"><h2 id="tools-title">注目のAIツール</h2><a class="more" href="/tools/">ツール一覧へ <span aria-hidden="true">→</span></a></div>
+      <div class="grid">{tools.slice(0, 3).map(tool => <ToolCard tool={tool} />)}</div>
+    </section>
+    <section class="section" aria-labelledby="guides-title">
+      <div class="section-heading"><h2 id="guides-title">人気記事・おすすめガイド</h2><a class="more" href="/guides/">ガイド一覧へ <span aria-hidden="true">→</span></a></div>
+      <div class="grid">{guides.map(guide => <GuideCard guide={guide} />)}</div>
+    </section>
+    <section class="banner"><div><h2>最初のプロンプトを作ってみよう</h2><p>SNS投稿、画像、ブログ、商品説明に使える指示文を作成できます。</p></div><a class="button primary" href="/prompts/">プロンプト生成を使う <span aria-hidden="true">→</span></a></section>
+  </div>
+</Base>

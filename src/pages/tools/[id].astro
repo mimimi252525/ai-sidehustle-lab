@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import tools from '../../data/tools.json';
+export function getStaticPaths() {
+  return tools.map(tool => ({ params: { id: tool.id }, props: { tool } }));
+}
+const { tool } = Astro.props;
+---
+<Base title={tool.name} description={tool.summary}>
+  <article class="wrap page narrow">
+    <a class="back" href="/tools/">← AIツール一覧</a>
+    <header class="page-heading">
+      <span class:list={['icon', tool.theme]} aria-hidden="true">{tool.symbol}</span>
+      <h1>{tool.name}</h1><p>{tool.summary}</p>
+      <div class="tags"><span>{tool.maker}</span><span>{tool.category}</span></div>
+    </header>
+    <section class="card reading">
+      <h2>特徴</h2><ul>{tool.features.map(feature => <li>{feature}</li>)}</ul>
+      <h2>料金・利用条件</h2>
+      <dl class="facts">{Object.entries({ '料金': tool.pricing, '無料枠': tool.freePlan, '日本語対応': tool.japanese, '商用利用': tool.commercial }).map(([label, value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+      <p>「要確認」の項目は、利用するプランの公式情報を確認してください。</p>
+      <h2>メリット</h2><p>{tool.benefits}</p>
+      <h2>注意点</h2><p>{tool.caution}</p>
+      <a class="button primary" href={tool.url} target="_blank" rel="noopener noreferrer">{tool.name} 公式サイト <span aria-hidden="true">↗</span><span class="sr-only">（新しいタブ）</span></a>
+    </section>
+  </article>
+</Base>

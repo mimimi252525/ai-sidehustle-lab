@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import { information } from '../data/site';
+export function getStaticPaths() {
+  return Object.entries(information).map(([info, entry]) => ({ params: { info }, props: { entry } }));
+}
+const { entry } = Astro.props;
+---
+<Base title={entry.title} description={entry.description}>
+  <div class="wrap page narrow">
+    <div class="page-heading"><h1>{entry.title}</h1><p>{entry.description}</p></div>
+    <div class="card reading">
+      {entry.paragraphs.map(paragraph => <p>{paragraph}</p>)}
+      {Astro.params.info === 'contact' && <a class="button primary" href="https://github.com/mimimi252525/ai-sidehustle-lab/issues" target="_blank" rel="noopener noreferrer">GitHub Issues を開く <span aria-hidden="true">↗</span><span class="sr-only">（新しいタブ）</span></a>}
+    </div>
+  </div>
+</Base>
