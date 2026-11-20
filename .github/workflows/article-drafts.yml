@@ -1,0 +1,73 @@
+name: 記事の編集用下書きを準備
+
+on:
+  schedule:
+    # 00:00 UTC = 09:00 JST (Monday, Wednesday, Friday)
+    - cron: '0 0 * * 1,3,5'
+  workflow_dispatch:
+
+concurrency:
+  group: article-drafts
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  draft:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: main をチェックアウト
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: main
+      - name: Node.js を準備
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .nvmrc
+      - name: 未処理の候補を1件選んで下書き生成
+        id: generate
+        shell: bash
+        run: |
+          refs="$(git ls-remote --heads origin 'refs/heads/article-draft/*')"
+          export RESERVED_ARTICLE_IDS="$(awk '{sub(/^refs\/heads\/article-draft\//, "", $2); print $2}' <<< "$refs")"
+          npm run draft:article
+      - name: 下書き専用ブランチへコミットとプッシュ
+        if: steps.generate.outputs.id != ''
+        shell: bash
+        env:
+          ARTICLE_ID: ${{ steps.generate.outputs.id }}
+        run: |
+          branch="article-draft/$ARTICLE_ID"
+          git switch -c "$branch"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- data/article-ideas.json "editorial/drafts/$ARTICLE_ID.md"
+          git commit -m "記事の編集用下書きを追加: $ARTICLE_ID"
+          git push --force-with-lease="refs/heads/$branch:" origin "HEAD:refs/heads/$branch"
+      - name: レビュー用のドラフトPRを作成
+        if: steps.generate.outputs.id != ''
+        shell: bash
+        env:
+          ARTICLE_ID: ${{ steps.generate.outputs.id }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch="article-draft/$ARTICLE_ID"
+          compare_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/compare/main...$branch?expand=1"
+          body="$(mktemp)"
+          cat > "$body" <<'BODY'
+          編集用下書きと候補の処理状態を追加します。このPRには記事本文や公開設定の変更は含まれません。
+
+          下書きを確認・編集してください。記事の公開は別のPRで行い、公開前チェックリストを確認してください。
+          BODY
+          if ! gh pr create --repo "$GITHUB_REPOSITORY" --draft --base main --head "$branch" \
+              --title "編集用下書き: $ARTICLE_ID" --body-file "$body"; then
+            echo "::warning::PR作成に失敗しました。上に表示された GitHub CLI のエラーとリポジトリ設定を確認してください。"
+            echo "プッシュ済みブランチ: $branch"
+            echo "手動PR作成URL: $compare_url"
+            exit 1
+          fi

@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import guides from '../../data/guides.json';
+import { publishedGuides as guides } from '../../data/published-guides';
 export function getStaticPaths() {
   return guides.map(guide => ({ params: { id: guide.id }, props: { guide } }));
 }
