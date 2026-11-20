@@ -11,6 +11,7 @@
     "draft:article": "node --disable-warning=ExperimentalWarning --experimental-strip-types scripts/create-article-draft.ts"
   },
   "dependencies": {
+    "@astrojs/markdown-remark": "6.3.11",
     "@astrojs/sitemap": "^3.6.0",
     "astro": "^5.16.0"
   },
