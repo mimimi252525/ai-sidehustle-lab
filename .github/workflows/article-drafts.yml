@@ -32,6 +32,8 @@ jobs:
       - name: 未処理の候補を1件選んで下書き生成
         id: generate
         shell: bash
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           refs="$(git ls-remote --heads origin 'refs/heads/article-draft/*')"
           export RESERVED_ARTICLE_IDS="$(awk '{sub(/^refs\/heads\/article-draft\//, "", $2); print $2}' <<< "$refs")"
@@ -60,9 +62,9 @@ jobs:
           compare_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/compare/main...$branch?expand=1"
           body="$(mktemp)"
           cat > "$body" <<'BODY'
-          編集用下書きと候補の処理状態を追加します。このPRには記事本文や公開設定の変更は含まれません。
+          編集用下書きと候補の処理状態を追加します。このPRには公開用データや公開設定の変更は含まれません。
 
-          下書きを確認・編集してください。記事の公開は別のPRで行い、公開前チェックリストを確認してください。
+          下書きの本文・事実関係・「要確認」項目を確認し、必要に応じて編集してください。記事の公開は別のPRで行い、公開前チェックリストを確認してください。
           BODY
           if ! gh pr create --repo "$GITHUB_REPOSITORY" --draft --base main --head "$branch" \
               --title "編集用下書き: $ARTICLE_ID" --body-file "$body"; then

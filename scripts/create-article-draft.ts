@@ -1,17 +1,12 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { generateArticle, type Article, type ArticleBrief } from './generate-article.ts';
 
-type Idea = {
+type Idea = ArticleBrief & {
   id: string;
-  topic: string;
-  category: string;
-  audience: string;
-  intent: string;
-  keyword: string;
   priority: number;
   status: 'pending' | 'drafted' | 'published' | 'retired';
   disclosure: '不要' | '要確認' | '必要';
-  outline: string[];
 };
 
 const ideasFile = new URL('../data/article-ideas.json', import.meta.url);
@@ -54,7 +49,10 @@ ${idea.outline.map((heading, index) =>
   ][index]}`,
 ).join('\n\n')}
 
-## 事実確認チェックリスト
+${reviewChecklist}`;
+}
+
+const reviewChecklist = `## 事実確認チェックリスト
 
 - [ ] 料金・無料枠・商用利用条件・アフィリエイト条件は要確認。公式ページ、対象プラン・地域、確認日を記録する。
 - [ ] ツールの機能や操作手順を公式情報と実際の操作で照合する。収益実績や数字は出典・根拠を確認する。
@@ -62,9 +60,28 @@ ${idea.outline.map((heading, index) =>
 - [ ] 引用・画像・事例の利用許可と個人情報を確認する。
 - [ ] [記事公開前チェックリスト](../publish-checklist.md)を完了する。
 `;
+
+function renderArticle(idea: Idea, article: Article) {
+  return `<!-- AI生成の編集用下書き。候補ID: ${idea.id}。カテゴリ: ${idea.category}。広告・PR判定: ${idea.disclosure}。公開前に編集者が確認すること。 -->
+
+# ${article.title}
+
+**SEO説明文**
+
+${article.description}
+
+${article.intro}
+
+${article.sections.map(({ heading, body }) => `## ${heading}\n\n${body}`).join('\n\n')}
+
+## まとめ
+
+${article.conclusion}
+
+${reviewChecklist}${article.reviewNotes.map(note => `- [ ] 要確認（AIからの引き継ぎ）：${note}\n`).join('')}`;
 }
 
-function main() {
+async function main() {
   const ideas: Idea[] = JSON.parse(readFileSync(ideasFile, 'utf8'));
   const guides: { id: string }[] = JSON.parse(readFileSync(guidesFile, 'utf8'));
   const ids = ideas.map(idea => idea.id);
@@ -95,20 +112,27 @@ function main() {
     return;
   }
 
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  const { topic, category, audience, intent, keyword, outline } = idea;
+  const draft = apiKey
+    ? renderArticle(idea, await generateArticle({ topic, category, audience, intent, keyword, outline }, apiKey))
+    : renderDraft(idea);
+
   mkdirSync(draftDirectory, { recursive: true });
   const path = new URL(`${idea.id}.md`, draftDirectory);
-  writeFileSync(path, renderDraft(idea), { flag: 'wx' });
+  writeFileSync(path, draft, { flag: 'wx' });
   idea.status = 'drafted';
   writeFileSync(ideasFile, JSON.stringify(ideas, null, 2) + '\n');
 
   if (process.env.GITHUB_OUTPUT) {
     appendFileSync(process.env.GITHUB_OUTPUT, `id=${idea.id}\n`);
   }
+  console.log(apiKey ? 'AIによる完成原稿を生成しました。' : 'OPENAI_API_KEY が未設定のため構成案を生成しました。');
   console.log(`編集用下書きを作成しました: ${fileURLToPath(path)}`);
 }
 
 try {
-  main();
+  await main();
 } catch (error) {
   console.error('記事下書きの作成に失敗しました。', error);
   process.exitCode = 1;
