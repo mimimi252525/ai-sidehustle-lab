@@ -39,7 +39,7 @@
     "intent": "何を伏せ、どう置き換えるかを知りたい",
     "keyword": "生成AI 入力 個人情報 チェック",
     "priority": 10,
-    "status": "pending",
+    "status": "drafted",
     "disclosure": "不要",
     "outline": [
       "入力する必要のある情報を絞る",
