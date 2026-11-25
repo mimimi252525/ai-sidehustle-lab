@@ -55,7 +55,7 @@
     "intent": "誤りや不自然な表現を投稿前に見つけたい",
     "keyword": "AI SNS 投稿 公開前 チェック",
     "priority": 9,
-    "status": "pending",
+    "status": "drafted",
     "disclosure": "不要",
     "outline": [
       "投稿の目的と読者を確認する",
