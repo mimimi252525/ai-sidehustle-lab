@@ -71,7 +71,7 @@
     "intent": "画像の出所と用途を引き継げる形で記録したい",
     "keyword": "AI画像 制作記録 管理",
     "priority": 8,
-    "status": "pending",
+    "status": "drafted",
     "disclosure": "要確認",
     "outline": [
       "使用ツールとモデルを記録する",
